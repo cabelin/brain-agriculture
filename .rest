@@ -1,0 +1,43 @@
+@host=http://localhost:3000
+
+###
+
+GET {{host}}
+Content-Type: application/json
+
+###
+
+GET {{host}}/rural-producers
+Content-Type: application/json
+
+###
+
+POST {{host}}/rural-producers
+Content-Type: application/json
+
+{
+    "name": "Oiasjdasd",
+    "cpfOrCnpj": "39829102139"
+}
+
+###
+
+@id=2
+
+GET {{host}}/rural-producers/{{id}}
+Content-Type: application/json
+
+###
+
+PATCH {{host}}/rural-producers/{{id}}
+Content-Type: application/json
+
+{
+    "name": "José Martins",
+    "cpfOrCnpj": "63922211123"
+}
+
+###
+
+DELETE {{host}}/rural-producers/{{id}}
+Content-Type: application/json
