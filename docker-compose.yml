@@ -12,7 +12,7 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=mysecretpassword
-      - POSTGRES_DB=mydatabase
+      - POSTGRES_DB=brainagriculture
     networks:
       - app-network
 
@@ -20,10 +20,12 @@ services:
   db:
     image: postgres:latest
     restart: always
+    ports:
+      - '5432:5432'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=mysecretpassword
-      - POSTGRES_DB=mydatabase
+      - POSTGRES_DB=brainagriculture
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
@@ -36,4 +38,3 @@ networks:
 # Define a volume for PostgreSQL data persistence
 volumes:
   db_data:
-
