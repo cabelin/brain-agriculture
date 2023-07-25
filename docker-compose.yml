@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  # Nest.js application service
+  nest-app:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=mydatabase
+    networks:
+      - app-network
+
+  # PostgreSQL service
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=mydatabase
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+# Define a custom network for the services
+networks:
+  app-network:
+
+# Define a volume for PostgreSQL data persistence
+volumes:
+  db_data:
+
