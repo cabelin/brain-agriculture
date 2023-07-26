@@ -11,6 +11,7 @@ Before you begin, make sure you have the following installed on your system:
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
+- [Node.js (version 9.8.0 or higher)](https://nodejs.org/)
 
 ## Getting Started
 
@@ -19,7 +20,21 @@ Before you begin, make sure you have the following installed on your system:
 ```bash
 git clone https://github.com/cabelin/brain-agriculture.git
 cd brain-agriculture
+```
+
+2. Start docker-compose
+```bash
 docker-compose up
 ```
 
+3. In another terminal (same diretory)
+```bash
+npm run migration:run
+```
+
+
+
 After completing the setup process, the application becomes accessible via a web browser at http://localhost:3000.
+
+You can also access examples of endpoints in the ".rest" file, later they will be documented using swagger
+
