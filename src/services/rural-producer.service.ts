@@ -1,12 +1,13 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 import { RuralProducerCreateDto } from '../models/dto/rural-producer-create.dto';
 import { RuralProducerUpdateDto } from '../models/dto/rural-producer-update.dto';
 import { RuralProducerDto } from '../models/dto/rural-producer.dto';
 import { RuralProducerEntity } from '../models/entities/rural-producer.entity';
 import { FarmCreateDto } from '../models/dto/farm-create.dto';
 import { FarmEntity } from '../models/entities/farm.entity';
+import { PlantingCultureEntity } from '../models/entities/planting-culture.entity';
 
 @Injectable()
 export class RuralProducerService {
@@ -15,17 +16,17 @@ export class RuralProducerService {
         private ruralProducerRepository: Repository<RuralProducerEntity>,
         @InjectRepository(FarmEntity)
         private farmRepository: Repository<FarmEntity>,
+        @InjectRepository(PlantingCultureEntity)
+        private plantingCultureRepository: Repository<PlantingCultureEntity>,
     ) {}
     
     async create(ruralProducerCreateDto: RuralProducerCreateDto): Promise<RuralProducerDto> {
         await this.validateRuralProducer(ruralProducerCreateDto);
 
-        const farmSaved = await this.farmRepository.save(ruralProducerCreateDto.farm);
-        ruralProducerCreateDto.farm = farmSaved;
+        const farmEntity = await this.createFarm(ruralProducerCreateDto.farm);
 
-        const ruralProducerEntity = this.ruralProducerRepository.create(ruralProducerCreateDto);
+        const ruralProducerSavedEntity = await this.createRuralProducer(ruralProducerCreateDto, farmEntity);
 
-        const ruralProducerSavedEntity = await this.ruralProducerRepository.save(ruralProducerEntity);
         const ruralProducerDto: RuralProducerDto = {
             id: ruralProducerSavedEntity.id,
             name: ruralProducerSavedEntity.name,
@@ -35,10 +36,26 @@ export class RuralProducerService {
         return ruralProducerDto;
     }
 
+    private async createRuralProducer(ruralProducerCreateDto: RuralProducerCreateDto, farmEntity: FarmEntity) {
+        const ruralProducerEntity = this.ruralProducerRepository.create(ruralProducerCreateDto);
+        ruralProducerEntity.farm = farmEntity;
+        return this.ruralProducerRepository.save(ruralProducerEntity);
+    }
+
+    private async createFarm(farm: FarmCreateDto) {
+        const farmEntity = this.farmRepository.create(farm);
+        farmEntity.plantingCultures = await this.plantingCultureRepository.find({
+            where: { id: In(farm.plantingCultureIds) }
+        });
+        return this.farmRepository.save(farmEntity);
+    }
+
     async findAll(): Promise<RuralProducerDto[]> {
         return this.ruralProducerRepository.find({
             relations: {
-                farm: true,
+                farm: {
+                    plantingCultures: true,
+                },
             }
         });
     }
@@ -47,7 +64,9 @@ export class RuralProducerService {
         const ruralProducerEntity = (await this.ruralProducerRepository.find({
             where: { id },
             relations: {
-                farm: true
+                farm: {
+                    plantingCultures: true,
+                },
             }
         }))?.[0];
         if (!ruralProducerEntity) {
@@ -73,20 +92,29 @@ export class RuralProducerService {
         const farmToUpdate = ruralProducerToUpdate.farm;
         const hasFarmToUpdate = !!ruralProducerUpdateDto.farm;
         if (hasFarmToUpdate) {
-            const { name, city, state, totalArea, arableArea, vegetationArea } = ruralProducerUpdateDto.farm;
-            await this.farmRepository.update({
-                id: farmToUpdate.id
-            }, {
-                name, city, state, totalArea, arableArea, vegetationArea
-            });
+            const { name, city, state, totalArea, arableArea, vegetationArea, plantingCultureIds } = ruralProducerUpdateDto.farm;
+            farmToUpdate.name = name;
+            farmToUpdate.city = city;
+            farmToUpdate.state = state;
+            farmToUpdate.totalArea = totalArea;
+            farmToUpdate.arableArea = arableArea;
+            farmToUpdate.vegetationArea = vegetationArea;
+            farmToUpdate.plantingCultures = await this.plantingCultureRepository.find({
+                where: { id: In(plantingCultureIds) }
+            });;
+
+            await this.farmRepository.save(farmToUpdate);            
         }
 
         const { name, cpfOrCnpj } = ruralProducerUpdateDto;
         await this.ruralProducerRepository.update({ id }, { name, cpfOrCnpj });
+
         return this.ruralProducerRepository.findOne({
             where: { id },
             relations: {
-                farm: true,
+                farm: {
+                    plantingCultures: true
+                },
             }
         });
     }
@@ -108,7 +136,7 @@ export class RuralProducerService {
 
     async validateRuralProducer(ruralProducerDto: RuralProducerCreateDto | RuralProducerUpdateDto, id?: number) {
         await this.validateExistsByCpfCnpj(ruralProducerDto.cpfOrCnpj, id);
-        this.validateFarm(ruralProducerDto.farm);
+        await this.validateFarm(ruralProducerDto.farm);
     }
 
     async validateExistsByCpfCnpj(cpfOrCnpj: string, id?: number) {
@@ -121,12 +149,29 @@ export class RuralProducerService {
         }
     }
 
-    validateFarm(farm: FarmCreateDto) {
+    async validateFarm(farm: FarmCreateDto) {
         if (!farm) return;
 
+        await this.validateFarmAreas(farm);
+
+        await this.validatePlantingCultures(farm.plantingCultureIds);
+    }
+
+    async validateFarmAreas(farm: FarmCreateDto) {
         const { arableArea, vegetationArea, totalArea } = farm;
         if (arableArea + vegetationArea > totalArea) {
             throw new BadRequestException('Total area must be greater than (Arable area + Vegetation area)')
+        }
+    }
+
+    async validatePlantingCultures(plantingCultureIds: number[] = []) {
+        const qnt = await this.plantingCultureRepository.count({
+            where: {
+                id: In(plantingCultureIds)
+            }
+        });
+        if (plantingCultureIds.length > 0 && qnt !== plantingCultureIds.length) {
+            throw new BadRequestException('One or more planting culture do not exists')
         }
     }
     

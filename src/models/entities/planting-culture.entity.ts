@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
-@Entity("plating_culture")
+@Entity("planting_culture")
 export class PlantingCultureEntity {
 
     @PrimaryGeneratedColumn()

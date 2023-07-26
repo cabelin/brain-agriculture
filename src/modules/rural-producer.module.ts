@@ -4,9 +4,10 @@ import { RuralProducerController } from '../controllers/rural-producer.controlle
 import { RuralProducerEntity } from '../models/entities/rural-producer.entity';
 import { RuralProducerService } from '../services/rural-producer.service';
 import { FarmEntity } from '../models/entities/farm.entity';
+import { PlantingCultureEntity } from '../models/entities/planting-culture.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RuralProducerEntity, FarmEntity])],
+  imports: [TypeOrmModule.forFeature([RuralProducerEntity, FarmEntity, PlantingCultureEntity])],
   controllers: [RuralProducerController],
   providers: [RuralProducerService]
 })

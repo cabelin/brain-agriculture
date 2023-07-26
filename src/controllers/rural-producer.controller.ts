@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { RuralProducerCreateDto } from '../models/dto/rural-producer-create.dto';
 import { RuralProducerUpdateDto } from '../models/dto/rural-producer-update.dto';
 import { RuralProducerService } from '../services/rural-producer.service';
-import { RuralProducerDto } from '../models/dto/rural-producer.dto';
 
 @Controller('rural-producers')
 export class RuralProducerController {

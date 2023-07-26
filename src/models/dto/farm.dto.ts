@@ -1,3 +1,4 @@
+import { PlantingCultureDto } from "./planting-culture.dto";
 
 export class FarmDto {
 
@@ -14,5 +15,7 @@ export class FarmDto {
     arableArea: number;
 
     vegetationArea: number;
+
+    plantingCultures: PlantingCultureDto[];
 
 }

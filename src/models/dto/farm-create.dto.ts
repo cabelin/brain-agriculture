@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsPositive } from "class-validator";
+import { ArrayNotEmpty, IsNotEmpty, IsPositive } from "class-validator";
 
 export class FarmCreateDto {
 
@@ -19,5 +19,8 @@ export class FarmCreateDto {
 
     @IsPositive()
     vegetationArea: number;
+
+    @ArrayNotEmpty()
+    plantingCultureIds: number[];
 
 }

@@ -16,15 +16,16 @@ POST {{host}}/rural-producers
 Content-Type: application/json
 
 {
-    "name": "Marcos José",
-    "cpfOrCnpj": "47714155019",
+    "name": "Loro José",
+    "cpfOrCnpj": "02241989644",
     "farm": {
-        "name": "Vila Madalenaa",
-        "city": "Teste1",
+        "name": "Vila Madalena",
+        "city": "Belo Horizonte",
         "state": "MG",
-        "totalArea": 60,
-        "arableArea": 20,
-        "vegetationArea": 31
+        "totalArea": 400,
+        "arableArea": 200,
+        "vegetationArea": 199,
+        "plantingCultureIds": []
     }
 }
 
@@ -41,15 +42,16 @@ PATCH {{host}}/rural-producers/{{id}}
 Content-Type: application/json
 
 {
-    "name": "José Martins",
+    "name": "Olegario Martins",
     "cpfOrCnpj": "68041226078",
     "farm": {
         "name": "Vila Madalena",
-        "city": "Teste",
+        "city": "ASDqweqwe",
         "state": "MG",
-        "totalArea": 5,
-        "arableArea": 2,
-        "vegetationArea": 3
+        "totalArea": 50,
+        "arableArea": 20,
+        "vegetationArea": 30,
+        "plantingCultureIds": [1, 2, 5]
     }
 }
 

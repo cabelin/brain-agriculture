@@ -13,8 +13,11 @@ export class RuralProducerEntity {
     @Column({ name: "cpf_cnpj", unique: true })
     cpfOrCnpj: string;
 
-    @OneToOne(() => FarmEntity)
-    @JoinColumn()
+    @OneToOne(() => FarmEntity, { cascade: false })
+    @JoinColumn({
+        name: 'farm_id',
+        referencedColumnName: 'id'
+    })
     farm: FarmEntity;
 
 }

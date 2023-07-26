@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsNotEmptyObject, Matches, Validate, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsNotEmptyObject, Validate, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { IsCpfCnpj } from '../../validators/cpfCnpj.validator';
 import { FarmCreateDto } from './farm-create.dto';
-import { Type } from 'class-transformer';
 
 export class RuralProducerCreateDto {
 

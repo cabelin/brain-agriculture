@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { PlantingCultureEntity } from "./culture.entity";
+import { PlantingCultureEntity } from "./planting-culture.entity";
 
 @Entity("farm")
 export class FarmEntity {
@@ -25,8 +25,18 @@ export class FarmEntity {
     @Column({ name: "vegetation_area" })
     vegetationArea: number;
 
-    @ManyToMany(() => PlantingCultureEntity)
-    @JoinTable()
-    platingCultures: PlantingCultureEntity[];
+    @ManyToMany(() => PlantingCultureEntity, { cascade: true })
+    @JoinTable({
+        name: 'farm_planting_cultures_planting_culture',
+        joinColumn: {
+          name: 'farm_id',
+          referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+          name: 'planting_culture_id',
+          referencedColumnName: 'id',
+        },
+      })
+    plantingCultures: PlantingCultureEntity[];
 
 }
