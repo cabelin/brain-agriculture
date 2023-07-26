@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { FarmEntity } from "./farm.entity";
 
 @Entity("rural_producer")
 export class RuralProducerEntity {
@@ -11,5 +12,9 @@ export class RuralProducerEntity {
 
     @Column({ name: "cpf_cnpj", unique: true })
     cpfOrCnpj: string;
+
+    @OneToOne(() => FarmEntity)
+    @JoinColumn()
+    farm: FarmEntity;
 
 }

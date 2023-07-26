@@ -5,6 +5,8 @@ import { RuralProducerController } from './rural-producer.controller';
 import { RuralProducerService } from '../services/rural-producer.service';
 import { RuralProducerDto } from '../models/dto/rural-producer.dto';
 import { RuralProducerEntity } from '../models/entities/rural-producer.entity';
+import { RuralProducerCreateDto } from '../models/dto/rural-producer-create.dto';
+import { FarmEntity } from '../models/entities/farm.entity';
 
 describe('RuralProducerController', () => {
   let controller: RuralProducerController;
@@ -17,6 +19,10 @@ describe('RuralProducerController', () => {
         RuralProducerService,
         {
           provide: getRepositoryToken(RuralProducerEntity),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(FarmEntity),
           useClass: Repository,
         },
       ],
@@ -33,7 +39,12 @@ describe('RuralProducerController', () => {
 
   it('should be call service when request all rural producers', async () => {
     // Given
-    const expected = [new RuralProducerDto()];
+    const expected: RuralProducerDto[] = [{
+      id: 1,
+      name: 'Marcos',
+      cpfOrCnpj: '29138327381',
+      farm: null
+    }];
     jest.spyOn(ruralProducerService, 'findAll').mockImplementation(() => Promise.resolve(expected));
 
     // When
@@ -46,11 +57,20 @@ describe('RuralProducerController', () => {
 
   it('should be call service when request create a new rural producer', async () => {
     // Given
-    const expected = new RuralProducerDto();
+    const createDto: RuralProducerCreateDto = {
+      name: 'Marcos',
+      cpfOrCnpj: '292838291831',
+      farm: null,
+    };
+    const expected: RuralProducerDto = {
+      id: 1,
+      ...createDto,
+      farm: null,
+    }
     jest.spyOn(ruralProducerService, 'create').mockImplementation(() => Promise.resolve(expected));
 
     // When
-    const result: RuralProducerDto = await controller.create(expected);
+    const result: RuralProducerDto = await controller.create(createDto);
 
     // Then
     expect(ruralProducerService.create).toBeCalled();
@@ -65,6 +85,7 @@ describe('RuralProducerController', () => {
       id: +id,
       name: 'test001',
       cpfOrCnpj: '29382139322',
+      farm: null,
     };
     jest.spyOn(ruralProducerService, 'findOne').mockImplementation(() => Promise.resolve(expected));
 
@@ -84,6 +105,7 @@ describe('RuralProducerController', () => {
       id: +id,
       name: 'test001',
       cpfOrCnpj: '02938139231',
+      farm: null,
     };
     jest.spyOn(ruralProducerService, 'update').mockImplementation(() => Promise.resolve(expected));
 

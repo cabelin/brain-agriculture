@@ -16,13 +16,21 @@ POST {{host}}/rural-producers
 Content-Type: application/json
 
 {
-    "name": "Oiasjdasd",
-    "cpfOrCnpj": "39829102139"
+    "name": "Marcos José",
+    "cpfOrCnpj": "47714155019",
+    "farm": {
+        "name": "Vila Madalenaa",
+        "city": "Teste1",
+        "state": "MG",
+        "totalArea": 60,
+        "arableArea": 20,
+        "vegetationArea": 31
+    }
 }
 
 ###
 
-@id=2
+@id=3
 
 GET {{host}}/rural-producers/{{id}}
 Content-Type: application/json
@@ -34,7 +42,15 @@ Content-Type: application/json
 
 {
     "name": "José Martins",
-    "cpfOrCnpj": "63922211123"
+    "cpfOrCnpj": "68041226078",
+    "farm": {
+        "name": "Vila Madalena",
+        "city": "Teste",
+        "state": "MG",
+        "totalArea": 5,
+        "arableArea": 2,
+        "vegetationArea": 3
+    }
 }
 
 ###

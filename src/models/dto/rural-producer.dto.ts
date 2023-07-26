@@ -1,3 +1,4 @@
+import { FarmDto } from "./farm.dto";
 
 export class RuralProducerDto {
 
@@ -6,5 +7,7 @@ export class RuralProducerDto {
     name: string;
 
     cpfOrCnpj: string;
+
+    farm: FarmDto;
 
 }
