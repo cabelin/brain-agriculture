@@ -19,7 +19,8 @@ const dataSourceOptions: DataSourceOptions = {
 
 const typeOrmModuleOptions: TypeOrmModuleOptions = {
   ...dataSourceOptions,
-  host: "db"
+  host: "db",
+  logging: Boolean(process.env.LOGGING)
 };
 
 const dataSource: DataSource = new DataSource(dataSourceOptions);
