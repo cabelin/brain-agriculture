@@ -6,7 +6,7 @@ import { ValidatorUtils } from '../utils/validator-utils';
   
 @ValidatorConstraint({ name: 'isCpfCnpj', async: false })
 export class IsCpfCnpj implements ValidatorConstraintInterface {
-    validate(cpfCnpj: string) {
+    validate(cpfCnpj: string = '') {
         if (cpfCnpj.length === 11) {
             return ValidatorUtils.validateCPF(cpfCnpj);
         }
