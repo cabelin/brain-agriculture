@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { PlantingCultureEntity } from "./culture.entity";
 
 @Entity("farm")
 export class FarmEntity {
@@ -23,5 +24,9 @@ export class FarmEntity {
 
     @Column({ name: "vegetation_area" })
     vegetationArea: number;
+
+    @ManyToMany(() => PlantingCultureEntity)
+    @JoinTable()
+    platingCultures: PlantingCultureEntity[];
 
 }

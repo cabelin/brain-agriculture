@@ -23,7 +23,8 @@ describe('RuralProducerService', () => {
       totalArea: 1000,
       vegetationArea: 100,
       arableArea: 800,
-      ...farm
+      platingCultures: [],
+      ...farm,
     };
   }
 
@@ -77,10 +78,14 @@ describe('RuralProducerService', () => {
       ...expected,
       farm: {
         ...expected.farm,
+        platingCultures: [],
       },
     };
 
-    jest.spyOn(farmRepository, 'save').mockImplementation(() => Promise.resolve(expected.farm));
+    jest.spyOn(farmRepository, 'save').mockImplementation(() => Promise.resolve({
+      ...expected.farm,
+      platingCultures: [],
+    }));
     jest.spyOn(ruralProducerRepository, 'create').mockImplementation(() => ruralProducerEntity);
     jest.spyOn(ruralProducerRepository, 'save').mockImplementation(() => Promise.resolve(ruralProducerEntity));
 
@@ -240,6 +245,7 @@ describe('RuralProducerService', () => {
       ...expected,
       farm: {
         ...expected.farm,
+        platingCultures: [],
       }
     };
     jest.spyOn(ruralProducerRepository, 'findOne').mockReturnValueOnce(Promise.resolve({
@@ -252,6 +258,7 @@ describe('RuralProducerService', () => {
       farm: {
         id: expected.id,
         ...ruralProducerUpdateDto.farm,
+        platingCultures: [],
       }
     }));
     jest.spyOn(farmRepository, 'update').mockImplementation();
