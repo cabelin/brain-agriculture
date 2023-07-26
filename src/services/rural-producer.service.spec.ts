@@ -354,6 +354,7 @@ describe('RuralProducerService', () => {
     };
     jest.spyOn(ruralProducerRepository, 'findOne').mockImplementation(() => Promise.resolve(expected));
     jest.spyOn(ruralProducerRepository, 'remove').mockImplementation();
+    jest.spyOn(farmRepository, 'save').mockImplementation();
     jest.spyOn(farmRepository, 'remove').mockImplementation();
 
     // When
@@ -367,6 +368,10 @@ describe('RuralProducerService', () => {
       },
     });
     expect(ruralProducerRepository.remove).toBeCalledWith(expected);
+    expect(farmRepository.remove).toBeCalledWith({
+      ...expected.farm,
+      plantingCultures: [],
+    });
     expect(farmRepository.remove).toBeCalledWith(expected.farm);
   });
 

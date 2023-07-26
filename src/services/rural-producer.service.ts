@@ -130,6 +130,10 @@ export class RuralProducerService {
         const exists = !!ruralProducer;
         if (exists) {
             await this.ruralProducerRepository.remove(ruralProducer);
+            
+            ruralProducer.farm.plantingCultures = [];
+            await this.farmRepository.save(ruralProducer.farm);
+
             await this.farmRepository.remove(ruralProducer.farm);
         }
     }
