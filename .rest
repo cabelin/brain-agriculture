@@ -16,22 +16,22 @@ POST {{host}}/rural-producers
 Content-Type: application/json
 
 {
-    "name": "Loro José",
-    "cpfOrCnpj": "02241989644",
+    "name": "Mateus Moraes",
+    "cpfOrCnpj": "08241989644",
     "farm": {
-        "name": "Vila Madalena",
-        "city": "Belo Horizonte",
-        "state": "MG",
-        "totalArea": 400,
-        "arableArea": 200,
-        "vegetationArea": 199,
-        "plantingCultureIds": []
+        "name": "Vila Rica",
+        "city": "Rio de Janeiro",
+        "state": "RJ",
+        "totalArea": 100,
+        "arableArea": 50,
+        "vegetationArea": 20,
+        "plantingCultureIds": [4, 5]
     }
 }
 
 ###
 
-@id=3
+@id=2
 
 GET {{host}}/rural-producers/{{id}}
 Content-Type: application/json
@@ -42,20 +42,25 @@ PATCH {{host}}/rural-producers/{{id}}
 Content-Type: application/json
 
 {
-    "name": "Olegario Martins",
-    "cpfOrCnpj": "68041226078",
-    "farm": {
-        "name": "Vila Madalena",
-        "city": "ASDqweqwe",
-        "state": "MG",
-        "totalArea": 50,
-        "arableArea": 20,
-        "vegetationArea": 30,
-        "plantingCultureIds": [1, 2, 5]
-    }
+  "name": "Marcos Silva",
+  "cpfOrCnpj": "94244267042",
+  "farm": {
+    "name": "Vila2 Madaldena",
+    "city": "Rio de Janeiro",
+    "state": "RJ",
+    "totalArea": 1050,
+    "arableArea": 250,
+    "vegetationArea": 240,
+    "plantingCultureIds": [1, 2, 3, 4, 5]
+  }
 }
 
 ###
 
 DELETE {{host}}/rural-producers/{{id}}
+Content-Type: application/json
+
+###
+
+GET {{host}}/reports/dashboard
 Content-Type: application/json
